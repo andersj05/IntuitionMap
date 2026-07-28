@@ -7,10 +7,10 @@
 .eval-cache/
 runs/
 datasets/private/
+datasets/external/
 
 # Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
-

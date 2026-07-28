@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
+from intuition_map_eval.fingerprint import canonical_text_bytes
 from intuition_map_eval.schema import DatasetManifest, LinkJudgment, Thought
 
 T = TypeVar("T")
@@ -77,7 +78,7 @@ def dataset_fingerprint(root: Path) -> str:
             raise ValueError(f"missing dataset file: {name}")
         digest.update(name.encode("utf-8"))
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update(canonical_text_bytes(path))
         digest.update(b"\0")
     return digest.hexdigest()
 
@@ -142,4 +143,3 @@ def validation_summary(dataset: Dataset) -> dict[str, Any]:
         "unlabeled_pairs_are": dataset.manifest.annotation.unlabeled_pairs_are,
         "valid": True,
     }
-

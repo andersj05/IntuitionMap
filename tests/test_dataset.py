@@ -5,7 +5,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from intuition_map_eval.dataset import load_dataset
+from intuition_map_eval.dataset import (
+    DATASET_FILES,
+    dataset_fingerprint,
+    load_dataset,
+)
+from intuition_map_eval.fingerprint import canonical_text_sha256
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -76,7 +81,35 @@ class DatasetTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "temporal leakage"):
                 load_dataset(root)
 
+    def test_text_fingerprints_are_independent_of_checkout_line_endings(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            lf_root = root / "lf"
+            crlf_root = root / "crlf"
+            lf_root.mkdir()
+            crlf_root.mkdir()
+
+            for name in DATASET_FILES:
+                source = PROJECT_ROOT / "datasets" / "smoke" / name
+                canonical = source.read_bytes().replace(
+                    b"\r\n", b"\n"
+                ).replace(b"\r", b"\n")
+                (lf_root / name).write_bytes(canonical)
+                (crlf_root / name).write_bytes(
+                    canonical.replace(b"\n", b"\r\n")
+                )
+
+            self.assertEqual(
+                dataset_fingerprint(lf_root),
+                dataset_fingerprint(crlf_root),
+            )
+            self.assertEqual(
+                canonical_text_sha256(lf_root / "manifest.json"),
+                canonical_text_sha256(crlf_root / "manifest.json"),
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import platform
 import subprocess
@@ -17,6 +16,7 @@ from intuition_map_eval.baseline import (
     Prediction,
 )
 from intuition_map_eval.dataset import Dataset, load_dataset
+from intuition_map_eval.fingerprint import canonical_text_sha256
 from intuition_map_eval.metrics import compute_metrics
 
 
@@ -131,7 +131,7 @@ def load_experiment_config(path: str | Path) -> ExperimentConfig:
 
 
 def _file_sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return canonical_text_sha256(path)
 
 
 def _git_metadata(repo_root: Path) -> dict[str, Any]:
@@ -260,4 +260,3 @@ def run_experiment(
         _prediction_rows(dataset, predictions),
     )
     return run_path, metrics
-

@@ -127,12 +127,17 @@ This allows later algorithms to be compared against exactly the same inputs.
 ## Research sequence
 
 1. Validate deterministic lexical and recency baselines.
-2. Create a small hand-labeled private temporal dataset.
-3. Add embedding retrieval and measure recall gain independently.
-4. Add a low-cost model reranker behind the spend gates.
-5. Evaluate relationship typing on a fixed candidate set.
-6. Add graph traversal and measure downstream retrieval.
-7. Test controlled novelty and contradiction retrieval.
-8. Only then investigate learned personalized link prediction or graph neural
-   networks.
-
+2. Freeze the literature, dataset, experiment, decision, and validation
+   controls in the canonical research plan.
+3. Register only the minimum orthogonal public capability datasets and preserve
+   their native evaluation.
+4. Strengthen cheap offline retrieval and measurement before adding a paid
+   model.
+5. Implement consent, local storage, redaction, export, deletion, annotation,
+   and protected chronological splits before requesting personal data.
+6. Pilot a small hand-labeled private temporal dataset and measure burden and
+   label stability.
+7. Test a small personal head, then relationship typing and graph traversal as
+   matched ablations.
+8. Test controlled novelty and downstream utility before considering learned
+   memory policies, graph neural networks, or broader intuition claims.
