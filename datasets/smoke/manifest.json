@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1.0",
+  "name": "synthetic-linking-smoke",
+  "description": "Synthetic fixture for verifying temporal candidate retrieval and metrics. Not a scientific benchmark.",
+  "provenance": "project-authored synthetic data",
+  "contains_personal_data": false,
+  "annotation": {
+    "candidate_pool": "all_prior_thoughts",
+    "exhaustive": false,
+    "unlabeled_pairs_are": "unknown"
+  }
+}
+

@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intuition-map-eval"
+version = "0.1.0"
+description = "Reproducible evaluation harness for IntuitionMap linking research"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+intuition-eval = "intuition_map_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

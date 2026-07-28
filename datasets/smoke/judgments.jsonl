@@ -1,0 +1,16 @@
+{"source_id":"t005","target_id":"t003","verdict":"essential","relation_types":["qualifies"],"strength":0.9,"rationale":"Uncertainty-bearing edges are a direct response to graph saturation.","annotator":"fixture"}
+{"source_id":"t005","target_id":"t002","verdict":"valid","relation_types":["applies_to"],"strength":0.5,"rationale":"Memory indexing also needs uncertainty-aware associations.","annotator":"fixture"}
+{"source_id":"t006","target_id":"t002","verdict":"essential","relation_types":["extends"],"strength":0.8,"rationale":"Both concern associative memory mechanisms despite little lexical overlap.","annotator":"fixture"}
+{"source_id":"t006","target_id":"t004","verdict":"invalid","relation_types":[],"strength":0.0,"rationale":"Shared abstraction is not enough to make this a useful personal link.","annotator":"fixture"}
+{"source_id":"t007","target_id":"t001","verdict":"essential","relation_types":["motivates"],"strength":1.0,"rationale":"The post-walk insight is exactly the capture problem.","annotator":"fixture"}
+{"source_id":"t007","target_id":"t006","verdict":"valid","relation_types":["resembles"],"strength":0.6,"rationale":"Both describe conclusions surfacing without explicit intermediate steps.","annotator":"fixture"}
+{"source_id":"t008","target_id":"t006","verdict":"essential","relation_types":["operationalizes"],"strength":0.9,"rationale":"Weak-edge traversal operationalizes distant associative combination.","annotator":"fixture"}
+{"source_id":"t008","target_id":"t003","verdict":"valid","relation_types":["tensions_with"],"strength":0.7,"rationale":"Weak links may create value but also threaten graph readability.","annotator":"fixture"}
+{"source_id":"t008","target_id":"t001","verdict":"invalid","relation_types":[],"strength":0.0,"rationale":"There is no direct or useful relationship in this fixture.","annotator":"fixture"}
+{"source_id":"t009","target_id":"t004","verdict":"essential","relation_types":["risk_of"],"strength":1.0,"rationale":"Rewriting memories is the failure that provenance must expose.","annotator":"fixture"}
+{"source_id":"t009","target_id":"t002","verdict":"valid","relation_types":["constrains"],"strength":0.5,"rationale":"Mutable memory systems must preserve authorship and history.","annotator":"fixture"}
+{"source_id":"t009","target_id":"t003","verdict":"invalid","relation_types":[],"strength":0.0,"rationale":"Graph readability is not the concern expressed here.","annotator":"fixture"}
+{"source_id":"t010","target_id":"t005","verdict":"essential","relation_types":["resolves"],"strength":0.9,"rationale":"Active questions can resolve uncertainty on relationships.","annotator":"fixture"}
+{"source_id":"t010","target_id":"t004","verdict":"valid","relation_types":["requires"],"strength":0.5,"rationale":"The user must see why the system is asking and what it may change.","annotator":"fixture"}
+{"source_id":"t010","target_id":"t006","verdict":"invalid","relation_types":[],"strength":0.0,"rationale":"Dream-like association does not directly justify interruption.","annotator":"fixture"}
+

@@ -1,0 +1,16 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Evaluation artifacts and private research data
+.eval-cache/
+runs/
+datasets/private/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+

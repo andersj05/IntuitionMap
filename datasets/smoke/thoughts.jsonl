@@ -1,0 +1,11 @@
+{"id":"t001","text":"I keep losing half-formed ideas when I leave my desk.","created_at":"2026-01-01T09:00:00Z","contexts":["capture","product"]}
+{"id":"t002","text":"The hippocampus may behave more like an index than a warehouse of complete memories.","created_at":"2026-01-02T09:00:00Z","contexts":["memory","research"]}
+{"id":"t003","text":"Maps become unreadable when every note connects to every other note.","created_at":"2026-01-03T09:00:00Z","contexts":["graph","ui"]}
+{"id":"t004","text":"An assistant should show whether a connection came from me or from the model.","created_at":"2026-01-04T09:00:00Z","contexts":["trust","product"]}
+{"id":"t005","text":"Maybe uncertainty belongs on relationships rather than only on thoughts.","created_at":"2026-01-05T09:00:00Z","contexts":["graph","research"]}
+{"id":"t006","text":"Dreaming seems to combine distant experiences without requiring literal similarity.","created_at":"2026-01-06T09:00:00Z","contexts":["memory","research"]}
+{"id":"t007","text":"When I return from a walk I often have a solution but cannot remember the steps that produced it.","created_at":"2026-01-07T09:00:00Z","contexts":["capture","intuition"]}
+{"id":"t008","text":"The graph should sometimes traverse a weak edge to escape an obvious conceptual cluster.","created_at":"2026-01-08T09:00:00Z","contexts":["graph","research"]}
+{"id":"t009","text":"If the model rewrites old memories it may gradually replace my perspective with its own.","created_at":"2026-01-09T09:00:00Z","contexts":["trust","memory"]}
+{"id":"t010","text":"A question that resolves several ambiguous links may be worth interrupting me for.","created_at":"2026-01-10T09:00:00Z","contexts":["graph","product"]}
+
