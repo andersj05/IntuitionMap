@@ -326,6 +326,63 @@ hashes.
 **Revisit when:** non-text dataset/config artifacts are added or the fingerprint
 schema is versioned.
 
+## DEC-0012 — Select a three-source Phase 1 portfolio
+
+**Date:** 2026-07-28
+**Status:** `accepted`; supersedes the deferred selection in DEC-0010
+**Scope:** public data
+
+**Context:** G0 passed, so the project needed the smallest public portfolio that
+tests temporal memory, sparse personalization, and directed relation handling.
+
+**Decision:** Select the pinned LongMemEval oracle artifact, PersonalLLM test
+split, and ATOMIC 2020 February 2021 release. Defer LaMP and ConceptNet because
+they add source/license complexity without adding an orthogonal Phase 1
+capability. Keep LoCoMo, SWOW, OpenAlex, WikiLinkGraphs, PersonaLens, and remote
+association sets deferred for the reasons in the registry.
+
+**Evidence:** `EXP-P1-001`, the exact manifests under `configs/data/`, and
+[the Phase 1 adapter validation](public-data-adapters.md).
+
+**Alternatives considered:** acquire every candidate; choose LaMP plus
+ConceptNet; skip public component checks and move directly to private data.
+
+**Consequences:** The portfolio is under 37 MB and has separate native tasks.
+PersonalLLM remains local-evaluation-only because its card does not fully
+enumerate the terms of every upstream prompt source. None of the three sources
+can support C3 or stronger claims.
+
+**Revisit when:** a preregistered component experiment requires a capability the
+selected source cannot test, or an upstream terms change invalidates an allowed
+use.
+
+## DEC-0013 — Preserve native anomalies instead of silently cleaning them
+
+**Date:** 2026-07-28
+**Status:** `accepted`
+**Scope:** data provenance
+
+**Context:** Fixture tests assumed LongMemEval answers were strings and ATOMIC
+triples had three non-empty fields. Full-artifact validation falsified both
+assumptions.
+
+**Decision:** Preserve LongMemEval answers as native `str | int`. Preserve the
+16 ATOMIC training rows with empty tails and mark them
+`is_complete=False`. Any later filter must be explicit, counted, and recorded
+in the experiment card.
+
+**Evidence:** Full parsing found 32 integer LongMemEval answers and 16 empty
+ATOMIC train tails, with no empty tails in dev or test.
+
+**Alternatives considered:** coerce integers to strings; silently drop
+incomplete triples; repair tails with model-generated text.
+
+**Consequences:** Native counts and source defects remain auditable. Downstream
+models cannot accidentally treat a fabricated cleanup as upstream ground truth.
+
+**Revisit when:** an official corrected release is registered as a distinct
+artifact and compared without overwriting this version.
+
 ## Result ledger
 
 Use one row for every completed, null, failed, or invalid run. Link to the
@@ -335,6 +392,9 @@ only.
 | ID | Date | Experiment/card | Status | Primary result | Cost | Decision / limitation | Artifact |
 |---|---|---|---|---|---:|---|---|
 | VAL-0001 | 2026-07-28 | [Phase 0 clean-environment validation](validation-record.md) | `result-pass` | 10 tests pass; two-run stable predictions/metrics/config/usage; zero paid calls | $0 | G0/C1 passes only; initial newline-dependent fingerprint defect was fixed and retained in the record. | Temporary isolated runs; stable hashes recorded in validation record |
+| ACQ-P1-001A | 2026-07-28 | [`EXP-P1-001`](../configs/experiments/EXP-P1-001-data-readiness.yaml) | `invalid-run` | ATOMIC download rejected before promotion because a rounded webpage size was 2,529 bytes too high | $0 | Corrected from immutable mirror metadata; no unverified file retained. | No artifact promoted; failure retained in experiment result |
+| VAL-P1-001 | 2026-07-28 | [`EXP-P1-001`](../configs/experiments/EXP-P1-001-data-readiness.yaml) | `result-pass` | Six registered files verified; 500 LongMemEval, 1,000 PersonalLLM, and 1,331,113 ATOMIC native records parsed; 20 tests pass | $0 | G1 passes only for the scoped local benchmark uses; C3–C5 remain unsupported. | Ignored `datasets/external/`; hashes in registry/manifests |
 
-No model experiment has yet produced a null or negative result. Rejected
-approaches above are design decisions, not retroactively labeled experiments.
+No model-quality experiment has yet produced a null or negative result.
+Rejected approaches above are design decisions, not retroactively labeled
+experiments.

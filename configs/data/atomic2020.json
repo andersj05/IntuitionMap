@@ -1,0 +1,43 @@
+{
+  "schema_version": "0.1.0",
+  "registry_id": "ATOMIC-001",
+  "name": "ATOMIC 2020 February 2021 release",
+  "source_owner": "Allen Institute for AI and ATOMIC 2020 authors",
+  "source_url": "https://github.com/allenai/comet-atomic-2020",
+  "upstream_revision": "33129ff9fbab126a98ce03f10017c405a553aeab",
+  "license": {
+    "name": "CC BY 4.0",
+    "scope_evidence": "Pinned official repository README and license bundled in the release archive",
+    "url": "https://github.com/allenai/comet-atomic-2020/blob/33129ff9fbab126a98ce03f10017c405a553aeab/README.md",
+    "evidence_sha256": "dd4299fe8c78cf5322e370006d0c72c1e7ef6068149096309b81f24b38e0d6f4"
+  },
+  "artifacts": [
+    {
+      "path": "README.md",
+      "destination": "atomic2020/33129ff9fbab126a98ce03f10017c405a553aeab/UPSTREAM-README.md",
+      "url": "https://raw.githubusercontent.com/allenai/comet-atomic-2020/33129ff9fbab126a98ce03f10017c405a553aeab/README.md",
+      "size_bytes": 3720,
+      "sha256": "dd4299fe8c78cf5322e370006d0c72c1e7ef6068149096309b81f24b38e0d6f4",
+      "role": "license-and-source-evidence"
+    },
+    {
+      "path": "atomic2020_data-feb2021.zip",
+      "destination": "atomic2020/33129ff9fbab126a98ce03f10017c405a553aeab/atomic2020_data-feb2021.zip",
+      "url": "https://huggingface.co/datasets/ontocord/atomic_2020/resolve/8aa3a1e13f5c7c37895c292226e019da81b98801/atomic2020_data-feb2021.zip",
+      "size_bytes": 12580048,
+      "sha256": "47c5f362ab4a3ea58c4962eebfdfd1c5420d3780e74cd3fe09efeef64f941c2b",
+      "role": "native-release-archive"
+    }
+  ],
+  "native_task": "Directed commonsense knowledge-graph completion over head, relation, and tail triples",
+  "adapter_scope": "Read native TSV triples and preserve official train/dev/test files and relation labels.",
+  "claims_supported": [
+    "C2 generic directed-relation capability"
+  ],
+  "claims_not_supported": [
+    "C3 personal associative fidelity",
+    "C4 downstream utility",
+    "C5 cross-user generalization"
+  ],
+  "mirror_note": "The official Google Drive link identifies this filename and the official README states the dataset license. The historical AI2 S3 URL returned 404 during the 2026-07-28 review, so acquisition uses a byte-pinned Hugging Face mirror whose Git-LFS SHA-256 is registered above."
+}

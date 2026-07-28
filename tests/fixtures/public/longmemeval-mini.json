@@ -1,0 +1,46 @@
+[
+  {
+    "question_id": "fixture-memory-1",
+    "question_type": "knowledge-update",
+    "question": "Which notebook did the fictional user choose?",
+    "answer": "The blue notebook",
+    "question_date": "2026/01/03 (Sat) 12:00",
+    "haystack_dates": [
+      "2026/01/01 (Thu) 09:00",
+      "2026/01/02 (Fri) 10:30"
+    ],
+    "haystack_session_ids": [
+      "fixture-session-1",
+      "fixture-session-2"
+    ],
+    "haystack_sessions": [
+      [
+        {
+          "role": "user",
+          "content": "I may use the red notebook.",
+          "has_answer": false
+        },
+        {
+          "role": "assistant",
+          "content": "That is one option.",
+          "has_answer": false
+        }
+      ],
+      [
+        {
+          "role": "user",
+          "content": "I changed my mind and chose the blue notebook.",
+          "has_answer": true
+        },
+        {
+          "role": "assistant",
+          "content": "The blue notebook is now the current choice.",
+          "has_answer": true
+        }
+      ]
+    ],
+    "answer_session_ids": [
+      "fixture-session-2"
+    ]
+  }
+]

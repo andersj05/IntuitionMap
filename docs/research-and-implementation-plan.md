@@ -514,14 +514,14 @@ gate.
 
 ### Phase 1 — Acquire only orthogonal public evidence
 
-- [ ] Register and build a minimal LongMemEval adapter.
-- [ ] Select **one** sparse-personalization benchmark: LaMP or PersonalLLM.
-- [ ] Select **one** generic relation source: ConceptNet or ATOMIC.
-- [ ] Preserve native benchmark evaluation and add only the minimum
+- [x] Register and build a minimal LongMemEval adapter.
+- [x] Select **one** sparse-personalization benchmark: LaMP or PersonalLLM.
+- [x] Select **one** generic relation source: ConceptNet or ATOMIC.
+- [x] Preserve native benchmark evaluation and add only the minimum
   IntuitionMap-compatible view needed for shared components.
-- [ ] Add download/preparation scripts, content hashes, small licensed test
+- [x] Add download/preparation scripts, content hashes, small licensed test
   fixtures, and adapter unit tests. Do not commit restricted raw data.
-- [ ] Record why LoCoMo, SWOW, OpenAlex, WikiLinkGraphs, or any other source is
+- [x] Record why LoCoMo, SWOW, OpenAlex, WikiLinkGraphs, or any other source is
   deferred before acquiring it.
 
 **Exit:** G1 passes for every acquired artifact. The portfolio tests memory,

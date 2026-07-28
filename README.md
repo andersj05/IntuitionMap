@@ -27,6 +27,12 @@ Phase 0 research controls:
 - [decision and result log](docs/decision-log.md)
 - [validation record](docs/validation-record.md)
 
+Phase 1 public-data controls:
+
+- [public-data adapters and validation](docs/public-data-adapters.md)
+- pinned acquisition manifests in [`configs/data`](configs/data)
+- preregistered [Phase 1 data-readiness experiment](configs/experiments/EXP-P1-001-data-readiness.yaml)
+
 ## Evaluation harness
 
 The first benchmark measures temporal edge-candidate retrieval:

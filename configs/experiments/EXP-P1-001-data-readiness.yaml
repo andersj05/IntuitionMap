@@ -1,0 +1,102 @@
+id: EXP-P1-001
+date: 2026-07-28
+research_question: >
+  Can a minimal, orthogonal public-data portfolio exercise temporal memory,
+  sparse personalization, and directed relation handling without conflating
+  any of those capabilities with personal intuition?
+hypothesis: >
+  Pinned LongMemEval oracle, PersonalLLM test, and ATOMIC 2020 artifacts can be
+  acquired reproducibly and exposed through small native-preserving adapters
+  with no paid inference and no private data.
+decision_this_can_change: >
+  Whether these three sources become the Phase 1 component portfolio or remain
+  blocked/deferred because of terms, provenance, schema, or reproducibility
+  failures.
+dataset_versions_and_hashes:
+  longmemeval:
+    revision: 98d7416c24c778c2fee6e6f3006e7a073259d48f
+    artifact: longmemeval_oracle.json
+    sha256: 821a2034d219ab45846873dd14c14f12cfe7776e73527a483f9dac095d38620c
+  personalllm:
+    revision: 643192faf99effc9403ce80dc5a38a016b6f7247
+    artifact: data/test-00000-of-00001.parquet
+    sha256: 92b6daccd6232874af757569814ab63fb3bc3448e1dbbe00791ce2e98a608ab2
+  atomic2020:
+    source_revision: 33129ff9fbab126a98ce03f10017c405a553aeab
+    mirrored_artifact_revision: 8aa3a1e13f5c7c37895c292226e019da81b98801
+    artifact: atomic2020_data-feb2021.zip
+    sha256: 47c5f362ab4a3ea58c4962eebfdfd1c5420d3780e74cd3fe09efeef64f941c2b
+train_dev_test_time_boundaries: >
+  Preserve each benchmark's native split. This experiment performs no model
+  fitting and creates no IntuitionMap train/dev/test split.
+intervention: >
+  Add content-addressed acquisition, validation, and minimal read-only adapter
+  views for the three selected sources.
+strongest_comparable_baseline: >
+  Manual downloads and one-off parsing with no pinned revision, content hash,
+  or adapter contract.
+information_available_to_each_system: >
+  Only the selected native artifact and its pinned source/card metadata.
+primary_metric: >
+  100 percent of registered artifacts pass size and SHA-256 verification and
+  100 percent of adapter fixtures pass schema tests.
+secondary_metrics:
+  - native record and split metadata preserved
+  - zero external artifacts committed to Git
+  - zero paid API requests
+  - explicit supported and unsupported claims in every data card
+practical_minimum_effect: >
+  All acquisition and adapter checks pass; partial readiness is not sufficient
+  for G1.
+statistical_test_and_interval: >
+  Not applicable: this is a deterministic data-readiness gate, not a quality
+  comparison.
+invalid_exposure_tolerance: not applicable
+latency_token_and_cost_budget:
+  paid_api_requests: 0
+  max_cost_usd: 0
+  max_registered_download_bytes: 50000000
+privacy_risks: >
+  Public artifacts may contain biased, harmful, or source-derived text. They
+  remain in ignored local storage, are not user data, and cannot support a
+  personal-fidelity claim.
+expected_failure_modes:
+  - license scope differs between code and data
+  - upstream artifact changes behind a mutable URL
+  - native schema changes
+  - PersonalLLM upstream prompt-source terms are underspecified
+  - the original ATOMIC 2020 archive URL remains unavailable
+stop_go_rule: >
+  Advance only if pinned artifacts verify exactly, fixture adapters pass,
+  native tasks remain identifiable, and registry limitations are explicit.
+  Otherwise leave the affected source blocked and do not substitute a new
+  dataset after inspecting results.
+result:
+  status: pass
+  completed_at_utc: 2026-07-28T21:24:47Z
+  environment:
+    operating_system: Windows 11
+    python: 3.12.4
+    parquet_reader: pyarrow 25.0.0
+  checks:
+    unit_tests: 20 passed
+    registered_artifacts_verified: 6
+    registered_bytes: 36879052
+    longmemeval_records: 500
+    personalllm_test_records: 1000
+    atomic2020_triples: 1331113
+    paid_api_requests: 0
+    estimated_cost_usd: 0
+    private_data_used: false
+  falsified_assumptions:
+    - LongMemEval answers are not all strings; 32 are integers.
+    - ATOMIC 2020 has 16 native training triples with empty tails.
+    - The rounded ATOMIC webpage size was not an acceptable registered byte count.
+  failure_handling: >
+    The first ATOMIC attempt was rejected before promotion because its
+    registered size was 2,529 bytes too high. Immutable mirror metadata
+    corrected the size to 12,580,048 bytes; the registered SHA-256 was
+    unchanged, and the rerun passed.
+  decision: >
+    G1 passes for the scoped local benchmark uses. Raw redistribution and
+    PersonalLLM product training remain outside the allowed use.

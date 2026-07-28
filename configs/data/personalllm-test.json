@@ -1,0 +1,43 @@
+{
+  "schema_version": "0.1.0",
+  "registry_id": "PLLM-001",
+  "name": "PersonalLLM test split",
+  "source_owner": "PersonalLLM authors",
+  "source_url": "https://github.com/namkoong-lab/PersonalLLM",
+  "upstream_revision": "643192faf99effc9403ce80dc5a38a016b6f7247",
+  "license": {
+    "name": "CC BY 4.0",
+    "scope_evidence": "Pinned official Hugging Face dataset-card metadata",
+    "url": "https://huggingface.co/datasets/namkoong-lab/PersonalLLM/blob/643192faf99effc9403ce80dc5a38a016b6f7247/README.md",
+    "evidence_sha256": "89609a728dd1b32501a334f81c071a21d34c4d237dc1c7adf56f149ebd6d1cd0"
+  },
+  "artifacts": [
+    {
+      "path": "README.md",
+      "destination": "personalllm/643192faf99effc9403ce80dc5a38a016b6f7247/README.md",
+      "url": "https://huggingface.co/datasets/namkoong-lab/PersonalLLM/resolve/643192faf99effc9403ce80dc5a38a016b6f7247/README.md",
+      "size_bytes": 9236,
+      "sha256": "89609a728dd1b32501a334f81c071a21d34c4d237dc1c7adf56f149ebd6d1cd0",
+      "role": "license-and-dataset-card"
+    },
+    {
+      "path": "data/test-00000-of-00001.parquet",
+      "destination": "personalllm/643192faf99effc9403ce80dc5a38a016b6f7247/test-00000-of-00001.parquet",
+      "url": "https://huggingface.co/datasets/namkoong-lab/PersonalLLM/resolve/643192faf99effc9403ce80dc5a38a016b6f7247/data/test-00000-of-00001.parquet",
+      "size_bytes": 8896944,
+      "sha256": "92b6daccd6232874af757569814ab63fb3bc3448e1dbbe00791ce2e98a608ab2",
+      "role": "native-test-split"
+    }
+  ],
+  "native_task": "Sparse preference adaptation over prompts, eight candidate responses, and reward-model personality columns",
+  "adapter_scope": "Expose prompt, response/model pairs, personality reward columns, and native IDs; do not convert reward-model scores into personal thought-link verdicts.",
+  "claims_supported": [
+    "C2 sparse-personalization capability"
+  ],
+  "claims_not_supported": [
+    "C3 personal associative fidelity",
+    "C4 downstream utility",
+    "C5 cross-user generalization"
+  ],
+  "upstream_terms_note": "The card names RewardBench, Anthropic HH-RLHF, and HelpSteer prompt sources but does not enumerate their controlling terms. Keep raw artifacts local and benchmark-only; do not redistribute or pool into product training without a separate upstream review."
+}
