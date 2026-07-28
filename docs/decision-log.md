@@ -447,6 +447,48 @@ experiment and an appropriate protected evaluation source.
 **Revisit when:** private pilot data exists behind the Phase 3 safeguards or a
 new public source tests a genuinely orthogonal retrieval mechanism.
 
+## DEC-0016 — Private pilot data is local, consented, immutable, and revocable
+
+**Date:** 2026-07-28
+**Status:** `accepted`
+**Scope:** private data and annotation
+
+**Context:** Personal thoughts are the first evidence source that can support
+C3, but they may contain credentials, identities, health, financial, legal, or
+third-party information. Collecting them before an enforceable local path would
+violate DEC-0007.
+
+**Decision:** Require a content-addressed active consent receipt before import.
+Permit private workspaces inside Git only under ignored `datasets/private/`,
+or outside Git. Preserve each source version immutably; store redaction as a
+derived view; separate explicit-link weak labels from gold judgments; require
+discovery before proposal exposure; seal a chronological holdout; default to
+redacted local export; make raw/training export explicit; and provide
+revocation plus cascading deletion.
+
+Policy version 0.1.0 permits no hosted processing and provides no
+application-level encryption. Consent expiry blocks new processing. Deletion
+removes application-managed rows and exact tracked files but does not claim to
+remove original sources, backups, snapshots, or forensic storage remnants.
+
+**Evidence:** [The private-data policy](private-data-policy.md), the
+`intuition_map_private` implementation, `EXP-P3-001`, and synthetic tests for
+consent, immutability, chronology, exposure, export, and deletion.
+
+**Alternatives considered:** import first and add consent later; send private
+text to the configured API by default; overwrite old source text with a
+redacted/model version; pool weak and gold links; expose proposals before
+independent discovery; label the final block and return it to training.
+
+**Consequences:** The system can now accept a narrowly scoped pilot after the
+user makes explicit choices. No real workspace or consent is created
+automatically. G3 remains pending measured user burden, repeat agreement, and
+real safety audits.
+
+**Revisit when:** the user requests encrypted multi-device storage, hosted
+processing, additional source types, ongoing imports after a sealed pilot, or
+multi-user recruitment. Each requires a new policy version.
+
 ## Result ledger
 
 Use one row for every completed, null, failed, or invalid run. Link to the
@@ -462,3 +504,4 @@ only.
 | RUN-P2-001A | 2026-07-28 | [`EXP-P2-001`](../configs/experiments/EXP-P2-001-cheap-retrieval.yaml) | `invalid-run` | Strict `question_date` filtering stopped at native query 301 after detecting an after-date evidence session | $0 | Official protocol and full audit showed that the native envelope, not `question_date`, defines availability; no score was produced. | No result artifact |
 | RUN-P2-001 | 2026-07-28 | [`EXP-P2-001`](../configs/experiments/EXP-P2-001-cheap-retrieval.yaml) | `result-no-go` | BM25 recall@10 `0.94883` versus TF-IDF `0.92138`; delta `+0.02745`, 95% CI `[+0.01450, +0.04262]` | $0 | Statistically positive but below the preregistered practical effect; G2 not passed and TF-IDF remains the accepted cheap floor. | Ignored `runs/phase2-longmemeval-s.json`; SHA-256 `a5d310a5ce2b47538c7b586c7dcd51242fa83e53a15845bdc37b5c356a41f68f` |
 | RUN-P2-002 | 2026-07-28 | [`EXP-P2-002`](../configs/experiments/EXP-P2-002-local-embedding-hybrid.yaml) | `result-negative` | RRF recall@10 `0.83535` versus BM25 `0.94883`; delta `-0.11348`, 95% CI `[-0.13731, -0.09092]` | $0 | Reject hash/RRF promotion; preserve as a negative control. | Same ignored result artifact and hash as RUN-P2-001 |
+| VAL-P3-000 | 2026-07-28 | [`EXP-P3-001`](../configs/experiments/EXP-P3-001-private-workflow-pilot.yaml) | `pre-pilot-validation-pass` | 57 tests pass, including a synthetic CLI round trip, immutable/idempotent import, stream separation, protected-test exclusion, and post-`VACUUM` canary deletion | $0 | Software and synthetic safety plumbing pass only. No user data or labels exist; G3 and C3 remain unsupported. | Committed fictional fixture and tests; no private run artifact |

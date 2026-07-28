@@ -1,0 +1,93 @@
+id: EXP-P3-001
+date: 2026-07-28
+status: preregistered-awaiting-consent-and-private-data
+research_question: >
+  Can one user safely import local thought history and complete the proposed
+  discovery/proposal annotation workflow at a sustainable burden and stable
+  verdict granularity?
+hypothesis: >
+  After a short orientation, the user will complete at least 80 percent of
+  exported one-action items with a median active response time at or below 10
+  seconds, and exact verdict agreement on blind repeats will be at least 70
+  percent.
+decision_this_can_change: >
+  Whether the four-level verdict task and five-candidate review queue are
+  feasible enough to collect a larger protected personal gold set, or must be
+  simplified before further collection.
+dataset_versions_and_hashes:
+  synthetic_workflow_fixture:
+    status: committed-test-fixture-to-be-added-with-implementation
+  private_pilot:
+    status: not-collected
+    manifest_sha256: to-be-frozen-after-explicit-consent-and-import
+train_dev_test_time_boundaries: >
+  Freeze a chronological query-level test manifest immediately after the
+  consented pilot import and before proposal labels are collected. Test query
+  IDs and their judgments never enter a training export. Discovery and
+  proposal streams remain separate.
+intervention:
+  - discovery prompt before any candidate exposure
+  - at most five later proposals per source thought
+  - two TF-IDF candidates
+  - one TF-IDF/BM25 disagreement candidate
+  - one deterministic diversity candidate
+  - one probability-logged random candidate from a declared temporal band
+  - blind repeats sampled at 10 percent after a minimum delay
+strongest_comparable_baseline: >
+  The same verdict task without optional relation types or mandatory
+  rationales; no model-quality baseline is evaluated in this workflow pilot.
+information_available_to_each_system: >
+  Private content stays in the ignored local private workspace. No hosted
+  model or API receives it. Queue construction can use deterministic local
+  retrieval only.
+primary_metric: median active response time for completed proposal verdicts
+secondary_metrics:
+  - proposal completion rate
+  - discovery completion rate
+  - blind-repeat exact verdict agreement
+  - skipped-item rate
+  - verdict distribution
+  - responses by sampling source and exposure stream
+  - deletion propagation and private-content escape audit
+minimum_pilot_evidence:
+  completed_proposal_responses: 100
+  completed_discovery_prompts: 20
+  completed_blind_repeats: 10
+practical_thresholds:
+  median_proposal_response_seconds_max: 10
+  proposal_completion_rate_min: 0.80
+  blind_repeat_exact_agreement_min: 0.70
+  provenance_inversions: 0
+  temporal_leakage_events: 0
+  private_content_escape_events: 0
+  deletion_propagation_failures: 0
+statistical_test_and_interval: >
+  Report participant-level descriptive metrics for this single-user
+  feasibility pilot, plus a percentile bootstrap interval for median response
+  time and a Wilson interval for completion/agreement proportions. Do not
+  generalize beyond this user.
+latency_token_and_cost_budget:
+  max_annotation_items_per_batch: 20
+  max_proposals_per_source: 5
+  paid_api_requests: 0
+  max_cost_usd: 0
+privacy_risks: >
+  Thoughts may contain credentials, identities, health, financial, legal, or
+  third-party information. Require explicit scoped consent before import,
+  local-only storage, derived redaction views, ignored private paths, no
+  content logging, default-redacted export, revocation, exact-file export
+  cleanup, secure deletion attempts, and a written explanation of filesystem
+  and backup limitations.
+expected_failure_modes:
+  - four verdicts are not stable enough for one-action labeling
+  - discovery prompts are frequently skipped
+  - proposal exposure suppresses independently remembered links
+  - random candidates feel wasteful
+  - response timers include interruptions and overstate burden
+  - source timestamps or explicit links are incomplete
+  - local storage is mistaken for application-level encryption
+stop_go_rule: >
+  G3 passes only after every minimum evidence count and every practical/safety
+  threshold passes. If burden or agreement fails, simplify the verdict task or
+  queue and preregister a new pilot before collecting more. Any privacy,
+  provenance, temporal-leakage, or deletion failure blocks expansion.

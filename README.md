@@ -40,6 +40,12 @@ Phase 2 retrieval controls:
 - preregistered [`EXP-P2-001`](configs/experiments/EXP-P2-001-cheap-retrieval.yaml)
   and [`EXP-P2-002`](configs/experiments/EXP-P2-002-local-embedding-hybrid.yaml)
 
+Phase 3 pre-pilot controls:
+
+- [private data and consent policy](docs/private-data-policy.md)
+- [implemented local workflow and user-input boundary](docs/phase3-private-workflow.md)
+- preregistered [private workflow pilot](configs/experiments/EXP-P3-001-private-workflow-pilot.yaml)
+
 ## Evaluation harness
 
 The first benchmark measures temporal edge-candidate retrieval:

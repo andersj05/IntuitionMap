@@ -544,20 +544,21 @@ decision log explains why retrieval signal is inadequate.
 
 ### Phase 3 — Build the low-burden private-data path
 
-- [ ] Define explicit consent, local storage, redaction, export, and deletion
+- [x] Define explicit consent, local storage, redaction, export, and deletion
   behavior before importing any content.
-- [ ] Add an importer that preserves immutable source text, timestamps, source
+- [x] Add an importer that preserves immutable source text, timestamps, source
   IDs, explicit links, and provenance without committing private content.
-- [ ] Add a weak-label table with source and confidence; never overwrite gold
+- [x] Add a weak-label table with source and confidence; never overwrite gold
   judgments.
-- [ ] Build an annotation queue/export-import workflow with one-action verdicts,
+- [x] Build an annotation queue/export-import workflow with one-action verdicts,
   optional relation/rationale, sampling source, exposure status, and response
   time.
-- [ ] Support discovery-stream links before showing proposals.
-- [ ] Add blind repeat judgments and controlled random/temporal samples.
+- [x] Support discovery-stream links before showing proposals.
+- [x] Add blind repeat judgments and controlled random/temporal samples.
 - [ ] Pilot the workflow, measure burden and consistency, and revise verdict or
   relation granularity before scaling.
-- [ ] Freeze a chronological gold test manifest.
+- [ ] Freeze a chronological gold test manifest. The sealed implementation is
+  tested synthetically; freezing the real manifest requires consented input.
 
 **Exit:** G3 passes. If labeling is too slow or inconsistent, simplify the task
 before collecting more data.

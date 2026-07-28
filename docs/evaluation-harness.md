@@ -57,13 +57,17 @@ The harness reports:
 - relevant (`essential` or `valid`) macro recall at `k`;
 - relevant hit rate at `k`;
 - mean reciprocal rank of the first relevant candidate;
+- judged graded nDCG lower bound at `k`, with `essential=3`, `valid=1`, and
+  unknown pairs contributing no assumed gain;
 - known-invalid predictions per query at `k`;
 - invalid rate among judged predictions at `k`;
-- query and judgment coverage;
+- per-query records and relation/time-distance subgroup coverage;
 - runtime, token usage, and estimated cost.
 
 Metrics are accompanied by per-query rankings so every aggregate number can be
-audited.
+audited. Paired comparisons use query-level bootstrap intervals. Prediction
+records separate ranking score from confidence and explicitly mark the current
+offline methods `uncalibrated`.
 
 ## Failure taxonomy
 
@@ -110,6 +114,9 @@ adapter will only be added behind these gates. No smoke test should spend money.
   comparisons.
 
 Smoke results are never evidence of product quality.
+Private data is governed by the versioned
+[consent and deletion policy](private-data-policy.md); an ignored path alone is
+not consent or encryption.
 
 ## Experiment artifacts
 
@@ -120,6 +127,7 @@ Each run writes an immutable directory containing:
 - source revision and dirty-state metadata when available;
 - full ranked predictions;
 - aggregate metrics;
+- deterministic error-screening records;
 - timing and zero-or-more usage ledger entries.
 
 This allows later algorithms to be compared against exactly the same inputs.
