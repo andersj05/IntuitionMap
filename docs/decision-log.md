@@ -383,6 +383,70 @@ models cannot accidentally treat a fabricated cleanup as upstream ground truth.
 **Revisit when:** an official corrected release is registered as a distinct
 artifact and compared without overwriting this version.
 
+## DEC-0014 — Use LongMemEval's native history envelope for availability
+
+**Date:** 2026-07-28
+**Status:** `accepted`
+**Scope:** public benchmark protocol
+
+**Context:** The official LongMemEval protocol says each question is answered
+after every supplied history session. Full LongMemEval-S evaluation found
+1,475 sessions dated after `question_date` and three at the same timestamp,
+including 75 after-date evidence sessions.
+
+**Decision:** For LongMemEval only, native history-envelope membership defines
+what is available to retrieval. Preserve and audit the conflicting timestamps.
+Exclude the 30 `_abs` queries from retrieval scoring as required by the
+official protocol. Do not weaken strict capture-time checks for IntuitionMap
+datasets.
+
+**Evidence:** The official repository defines the question as following all
+interactions and separately instructs retrieval evaluation to skip the 30
+abstention instances. The complete local timestamp audit is recorded in
+[the Phase 2 report](phase2-retrieval.md).
+
+**Alternatives considered:** silently drop 1,478 sessions; repair timestamps;
+score evidence that becomes unreachable after filtering; ignore the anomaly.
+
+**Consequences:** The public score remains comparable to the native retrieval
+task without allowing this dataset defect to redefine personal-data
+chronology. The first strict-cutoff attempt is retained as an invalid run.
+
+**Revisit when:** an official corrected artifact is pinned as a distinct
+version or the benchmark owners clarify a different availability rule.
+
+## DEC-0015 — Do not advance the Phase 2 hybrid or claim G2
+
+**Date:** 2026-07-28
+**Status:** `accepted`; hash/RRF promotion `rejected`
+**Scope:** retrieval baseline
+
+**Context:** BM25 had the best observed LongMemEval-S recall, but its
+preregistered gain over TF-IDF was smaller than the practical threshold. The
+hash-projection RRF hybrid substantially regressed BM25.
+
+**Decision:** Keep TF-IDF as the accepted cheap floor under the `EXP-P2-001`
+stop rule. Retain BM25 as an observed comparator, and retain the hash projection
+and RRF implementation only as negative diagnostic controls. Mark G2 not
+passed; do not spend API budget or add a larger model on the strength of this
+result.
+
+**Evidence:** BM25 minus TF-IDF recall@10 was `+0.02745`, paired 95% interval
+`[+0.01450, +0.04262]`, below both preregistered practical thresholds. RRF
+minus BM25 was `-0.11348`, interval `[-0.13731, -0.09092]`. Both comparisons
+used 470 identical queries and 2,000 bootstrap resamples.
+
+**Alternatives considered:** promote BM25 because its interval excludes zero;
+promote the more complex hybrid despite its regression; tune on the test
+labels; run paid embeddings without a new decision and budget.
+
+**Consequences:** Phase 3 can build the protected data workflow, but C3 and
+later claims remain blocked. A future model requires a new preregistered
+experiment and an appropriate protected evaluation source.
+
+**Revisit when:** private pilot data exists behind the Phase 3 safeguards or a
+new public source tests a genuinely orthogonal retrieval mechanism.
+
 ## Result ledger
 
 Use one row for every completed, null, failed, or invalid run. Link to the
@@ -394,7 +458,7 @@ only.
 | VAL-0001 | 2026-07-28 | [Phase 0 clean-environment validation](validation-record.md) | `result-pass` | 10 tests pass; two-run stable predictions/metrics/config/usage; zero paid calls | $0 | G0/C1 passes only; initial newline-dependent fingerprint defect was fixed and retained in the record. | Temporary isolated runs; stable hashes recorded in validation record |
 | ACQ-P1-001A | 2026-07-28 | [`EXP-P1-001`](../configs/experiments/EXP-P1-001-data-readiness.yaml) | `invalid-run` | ATOMIC download rejected before promotion because a rounded webpage size was 2,529 bytes too high | $0 | Corrected from immutable mirror metadata; no unverified file retained. | No artifact promoted; failure retained in experiment result |
 | VAL-P1-001 | 2026-07-28 | [`EXP-P1-001`](../configs/experiments/EXP-P1-001-data-readiness.yaml) | `result-pass` | Six registered files verified; 500 LongMemEval, 1,000 PersonalLLM, and 1,331,113 ATOMIC native records parsed; 20 tests pass | $0 | G1 passes only for the scoped local benchmark uses; C3–C5 remain unsupported. | Ignored `datasets/external/`; hashes in registry/manifests |
-
-No model-quality experiment has yet produced a null or negative result.
-Rejected approaches above are design decisions, not retroactively labeled
-experiments.
+| RUN-P2-000 | 2026-07-28 | [`EXP-P2-002`](../configs/experiments/EXP-P2-002-local-embedding-hybrid.yaml) | `invalid-run` | Initial implementation was terminated before its first 50-query checkpoint because it recomputed base features inside RRF | $0 | Removed duplicate computation and replaced cryptographic feature hashing with deterministic CRC32; no score was produced. | No result artifact |
+| RUN-P2-001A | 2026-07-28 | [`EXP-P2-001`](../configs/experiments/EXP-P2-001-cheap-retrieval.yaml) | `invalid-run` | Strict `question_date` filtering stopped at native query 301 after detecting an after-date evidence session | $0 | Official protocol and full audit showed that the native envelope, not `question_date`, defines availability; no score was produced. | No result artifact |
+| RUN-P2-001 | 2026-07-28 | [`EXP-P2-001`](../configs/experiments/EXP-P2-001-cheap-retrieval.yaml) | `result-no-go` | BM25 recall@10 `0.94883` versus TF-IDF `0.92138`; delta `+0.02745`, 95% CI `[+0.01450, +0.04262]` | $0 | Statistically positive but below the preregistered practical effect; G2 not passed and TF-IDF remains the accepted cheap floor. | Ignored `runs/phase2-longmemeval-s.json`; SHA-256 `a5d310a5ce2b47538c7b586c7dcd51242fa83e53a15845bdc37b5c356a41f68f` |
+| RUN-P2-002 | 2026-07-28 | [`EXP-P2-002`](../configs/experiments/EXP-P2-002-local-embedding-hybrid.yaml) | `result-negative` | RRF recall@10 `0.83535` versus BM25 `0.94883`; delta `-0.11348`, 95% CI `[-0.13731, -0.09092]` | $0 | Reject hash/RRF promotion; preserve as a negative control. | Same ignored result artifact and hash as RUN-P2-001 |

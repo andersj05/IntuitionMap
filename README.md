@@ -33,6 +33,13 @@ Phase 1 public-data controls:
 - pinned acquisition manifests in [`configs/data`](configs/data)
 - preregistered [Phase 1 data-readiness experiment](configs/experiments/EXP-P1-001-data-readiness.yaml)
 
+Phase 2 retrieval controls:
+
+- [retrieval methods, benchmark protocol, results, and no-go decision](docs/phase2-retrieval.md)
+- zero-cost configurations in [`configs/phase2`](configs/phase2)
+- preregistered [`EXP-P2-001`](configs/experiments/EXP-P2-001-cheap-retrieval.yaml)
+  and [`EXP-P2-002`](configs/experiments/EXP-P2-002-local-embedding-hybrid.yaml)
+
 ## Evaluation harness
 
 The first benchmark measures temporal edge-candidate retrieval:

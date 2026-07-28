@@ -12,6 +12,12 @@ def _string(value: Any, field: str) -> str:
     return value.strip()
 
 
+def _text(value: Any, field: str) -> str:
+    if not isinstance(value, str):
+        raise ValueError(f"{field} must be a string")
+    return value
+
+
 def _string_tuple(value: Any, field: str) -> tuple[str, ...]:
     if not isinstance(value, list):
         raise ValueError(f"{field} must be a list")
@@ -30,32 +36,46 @@ def _native_answer(value: Any) -> str | int:
 class LongMemEvalTurn:
     role: str
     content: str
-    has_answer: bool
+    has_answer: bool | None
+
+    @property
+    def is_empty(self) -> bool:
+        return not self.content.strip()
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> LongMemEvalTurn:
-        expected = {"role", "content", "has_answer"}
-        if data.keys() != expected:
+        required = {"role", "content"}
+        optional = {"has_answer"}
+        missing = required - data.keys()
+        unknown = data.keys() - required - optional
+        if missing or unknown:
             raise ValueError(
-                f"turn fields must be exactly {sorted(expected)}, got {sorted(data)}"
+                f"turn fields differ; missing={sorted(missing)}, "
+                f"unknown={sorted(unknown)}"
             )
         role = _string(data["role"], "turn.role")
         if role not in {"user", "assistant"}:
             raise ValueError("turn.role must be user or assistant")
-        if not isinstance(data["has_answer"], bool):
+        has_answer = data.get("has_answer")
+        if has_answer is not None and not isinstance(has_answer, bool):
             raise ValueError("turn.has_answer must be a boolean")
         return cls(
             role=role,
-            content=_string(data["content"], "turn.content"),
-            has_answer=data["has_answer"],
+            content=_text(data["content"], "turn.content"),
+            has_answer=has_answer,
         )
 
 
 @dataclass(frozen=True, slots=True)
 class LongMemEvalSession:
     session_id: str
+    position: int
     date: str
     turns: tuple[LongMemEvalTurn, ...]
+
+    @property
+    def candidate_id(self) -> str:
+        return f"{self.session_id}@@{self.position:04d}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,8 +127,6 @@ class LongMemEvalRecord:
                 "haystack_dates, haystack_session_ids, and haystack_sessions "
                 "must have equal lengths"
             )
-        if len(session_ids) != len(set(session_ids)):
-            raise ValueError("haystack_session_ids must be unique")
         sessions: list[LongMemEvalSession] = []
         for index, raw_session in enumerate(raw_sessions):
             if not isinstance(raw_session, list) or not raw_session:
@@ -121,6 +139,7 @@ class LongMemEvalRecord:
             sessions.append(
                 LongMemEvalSession(
                     session_id=session_ids[index],
+                    position=index,
                     date=dates[index],
                     turns=tuple(turns),
                 )

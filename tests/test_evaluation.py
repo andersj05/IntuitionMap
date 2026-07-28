@@ -8,6 +8,7 @@ from pathlib import Path
 from intuition_map_eval.baseline import (
     LexicalTemporalBaseline,
     LexicalTemporalConfig,
+    Prediction,
 )
 from intuition_map_eval.dataset import load_dataset
 from intuition_map_eval.metrics import compute_metrics
@@ -42,6 +43,12 @@ class EvaluationTests(unittest.TestCase):
         self.assertNotIn("precision", metrics["at_k"]["3"])
         self.assertGreaterEqual(metrics["mean_reciprocal_rank"], 0)
         self.assertLessEqual(metrics["mean_reciprocal_rank"], 1)
+        self.assertIn(
+            "judged_graded_ndcg_lower_bound",
+            metrics["at_k"]["3"],
+        )
+        self.assertIn("relation_type", metrics["subgroups"])
+        self.assertIn("time_distance", metrics["subgroups"])
 
     def test_duplicate_predictions_are_rejected(self) -> None:
         duplicate = (self.predictions[0], self.predictions[0])
@@ -57,6 +64,7 @@ class EvaluationTests(unittest.TestCase):
             )
             self.assertTrue((run_path / "manifest.json").is_file())
             self.assertTrue((run_path / "predictions.jsonl").is_file())
+            self.assertTrue((run_path / "error-analysis.json").is_file())
             usage = json.loads(
                 (run_path / "usage.json").read_text(encoding="utf-8")
             )
@@ -65,6 +73,75 @@ class EvaluationTests(unittest.TestCase):
             self.assertEqual(
                 metrics["runtime"]["paid_api_request_count"], 0
             )
+
+    def test_empty_judgments_return_none_instead_of_fabricating_negatives(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            for name in ("manifest.json", "thoughts.jsonl"):
+                (root / name).write_text(
+                    (
+                        PROJECT_ROOT / "datasets" / "smoke" / name
+                    ).read_text(encoding="utf-8"),
+                    encoding="utf-8",
+                )
+            (root / "judgments.jsonl").write_text("", encoding="utf-8")
+            dataset = load_dataset(root)
+            predictions = LexicalTemporalBaseline(
+                LexicalTemporalConfig()
+            ).rank(dataset)
+            metrics = compute_metrics(dataset, predictions, [5])
+            self.assertIsNone(metrics["mean_reciprocal_rank"])
+            self.assertIsNone(
+                metrics["at_k"]["5"]["relevant_macro_recall"]
+            )
+            self.assertIsNone(
+                metrics["at_k"]["5"][
+                    "known_invalid_predictions_per_judged_query"
+                ]
+            )
+            self.assertEqual(metrics["per_query"], {})
+
+    def test_invalid_exposure_has_an_exact_judged_query_denominator(
+        self,
+    ) -> None:
+        predictions = (
+            Prediction(
+                source_id="t006",
+                target_id="t004",
+                rank=1,
+                score=1.0,
+                signals={},
+            ),
+        )
+        metrics = compute_metrics(self.dataset, predictions, [1])
+        self.assertAlmostEqual(
+            metrics["at_k"]["1"][
+                "known_invalid_predictions_per_judged_query"
+            ],
+            1 / 6,
+        )
+        self.assertEqual(
+            metrics["at_k"]["1"]["invalid_rate_among_judged_predictions"],
+            1.0,
+        )
+
+    def test_calibration_ready_fields_are_validated(self) -> None:
+        invalid = (
+            Prediction(
+                source_id="t002",
+                target_id="t001",
+                rank=1,
+                score=0.5,
+                signals={},
+                method="future-calibrator",
+                confidence=1.5,
+                abstained=False,
+            ),
+        )
+        with self.assertRaisesRegex(ValueError, "confidence"):
+            compute_metrics(self.dataset, invalid, [1])
 
 
 if __name__ == "__main__":

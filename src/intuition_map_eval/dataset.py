@@ -101,6 +101,19 @@ def load_dataset(root: str | Path) -> Dataset:
         raise ValueError("thoughts must be ordered by created_at")
 
     thoughts_by_id = {thought.id: thought for thought in thoughts}
+    for thought in thoughts:
+        for target_id in thought.explicit_links:
+            if target_id not in thoughts_by_id:
+                raise ValueError(
+                    f"thought {thought.id} has an unknown explicit link: {target_id}"
+                )
+            target = thoughts_by_id[target_id]
+            if target.created_at >= thought.created_at:
+                raise ValueError(
+                    "temporal leakage: explicit-link target "
+                    f"{target.id} must predate source {thought.id}"
+                )
+
     seen_pairs: set[tuple[str, str]] = set()
     for judgment in judgments:
         pair = (judgment.source_id, judgment.target_id)

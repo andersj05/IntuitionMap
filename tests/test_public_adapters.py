@@ -42,6 +42,35 @@ class PublicAdapterTests(unittest.TestCase):
         record = LongMemEvalRecord.from_dict(values[0])
         self.assertEqual(record.answer, 3)
 
+    def test_longmemeval_does_not_invent_missing_turn_evidence_flags(self) -> None:
+        values = json.loads(
+            (FIXTURES / "longmemeval-mini.json").read_text(encoding="utf-8")
+        )
+        del values[0]["haystack_sessions"][0][0]["has_answer"]
+        record = LongMemEvalRecord.from_dict(values[0])
+        self.assertIsNone(record.sessions[0].turns[0].has_answer)
+
+    def test_longmemeval_disambiguates_colliding_native_session_ids(self) -> None:
+        values = json.loads(
+            (FIXTURES / "longmemeval-mini.json").read_text(encoding="utf-8")
+        )
+        values[0]["haystack_session_ids"][1] = "fixture-session-1"
+        values[0]["answer_session_ids"] = []
+        record = LongMemEvalRecord.from_dict(values[0])
+        self.assertEqual(record.sessions[0].session_id, record.sessions[1].session_id)
+        self.assertNotEqual(
+            record.sessions[0].candidate_id,
+            record.sessions[1].candidate_id,
+        )
+
+    def test_longmemeval_preserves_an_empty_native_turn(self) -> None:
+        values = json.loads(
+            (FIXTURES / "longmemeval-mini.json").read_text(encoding="utf-8")
+        )
+        values[0]["haystack_sessions"][0][0]["content"] = ""
+        record = LongMemEvalRecord.from_dict(values[0])
+        self.assertTrue(record.sessions[0].turns[0].is_empty)
+
     def test_personalllm_preserves_candidates_profiles_and_native_ids(self) -> None:
         records = tuple(iter_personalllm_jsonl(FIXTURES / "personalllm-mini.jsonl"))
         self.assertEqual(len(records), 1)

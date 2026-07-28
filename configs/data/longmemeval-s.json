@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "registry_id": "LME-S-001",
+  "name": "LongMemEval cleaned S",
+  "source_owner": "LongMemEval authors",
+  "source_url": "https://github.com/xiaowu0162/LongMemEval",
+  "upstream_revision": "98d7416c24c778c2fee6e6f3006e7a073259d48f",
+  "license": {
+    "name": "MIT",
+    "scope_evidence": "Pinned Hugging Face dataset-card metadata",
+    "url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned/blob/98d7416c24c778c2fee6e6f3006e7a073259d48f/README.md",
+    "evidence_sha256": "fe31783d4e5d132681a25e4192e85def8edd214094939879f5283818c0a4a3e0"
+  },
+  "artifacts": [
+    {
+      "path": "README.md",
+      "destination": "longmemeval/98d7416c24c778c2fee6e6f3006e7a073259d48f/README.md",
+      "url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned/resolve/98d7416c24c778c2fee6e6f3006e7a073259d48f/README.md",
+      "size_bytes": 626,
+      "sha256": "fe31783d4e5d132681a25e4192e85def8edd214094939879f5283818c0a4a3e0",
+      "role": "license-and-dataset-card"
+    },
+    {
+      "path": "longmemeval_s_cleaned.json",
+      "destination": "longmemeval/98d7416c24c778c2fee6e6f3006e7a073259d48f/longmemeval_s_cleaned.json",
+      "url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned/resolve/98d7416c24c778c2fee6e6f3006e7a073259d48f/longmemeval_s_cleaned.json",
+      "size_bytes": 277383467,
+      "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+      "role": "native-retrieval-benchmark"
+    }
+  ],
+  "native_task": "Long-term conversational memory question answering and evidence-session retrieval with distractors",
+  "adapter_scope": "Rank native sessions for each question, preserving question types, session timestamps, evidence-session IDs, and the separate native QA target.",
+  "claims_supported": [
+    "C2 generic temporal-memory retrieval capability"
+  ],
+  "claims_not_supported": [
+    "C3 personal associative fidelity",
+    "C4 downstream utility",
+    "C5 cross-user generalization"
+  ]
+}

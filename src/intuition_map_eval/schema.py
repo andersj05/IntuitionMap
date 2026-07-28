@@ -59,13 +59,14 @@ class Thought:
     text: str
     created_at: datetime
     contexts: tuple[str, ...]
+    explicit_links: tuple[str, ...] = ()
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Thought:
         _validate_keys(
             data,
             required={"id", "text", "created_at"},
-            optional={"contexts"},
+            optional={"contexts", "explicit_links"},
             record="thought",
         )
         return cls(
@@ -73,6 +74,9 @@ class Thought:
             text=_non_empty_string(data["text"], "text"),
             created_at=parse_timestamp(data["created_at"]),
             contexts=_string_tuple(data.get("contexts", []), "contexts"),
+            explicit_links=_string_tuple(
+                data.get("explicit_links", []), "explicit_links"
+            ),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -81,6 +85,7 @@ class Thought:
             "text": self.text,
             "created_at": self.created_at.isoformat().replace("+00:00", "Z"),
             "contexts": list(self.contexts),
+            "explicit_links": list(self.explicit_links),
         }
 
 
@@ -216,4 +221,3 @@ class DatasetManifest:
             contains_personal_data=data["contains_personal_data"],
             annotation=AnnotationPolicy.from_dict(data["annotation"]),
         )
-

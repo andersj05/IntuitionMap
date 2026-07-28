@@ -27,16 +27,23 @@ class AcquisitionTests(unittest.TestCase):
     def test_registered_manifests_are_valid_and_bounded(self) -> None:
         manifest_root = Path(__file__).parents[1] / "configs" / "data"
         paths = sorted(manifest_root.glob("*.json"))
-        self.assertEqual(len(paths), 3)
+        self.assertEqual(len(paths), 4)
         specs = [load_public_dataset_spec(path) for path in paths]
         self.assertEqual(
             {spec.registry_id for spec in specs},
-            {"LME-001", "PLLM-001", "ATOMIC-001"},
+            {"LME-001", "LME-S-001", "PLLM-001", "ATOMIC-001"},
         )
+        phase_one = [
+            spec for spec in specs if spec.registry_id != "LME-S-001"
+        ]
         self.assertLessEqual(
-            sum(spec.registered_download_bytes for spec in specs),
+            sum(spec.registered_download_bytes for spec in phase_one),
             50_000_000,
         )
+        phase_two = next(
+            spec for spec in specs if spec.registry_id == "LME-S-001"
+        )
+        self.assertLessEqual(phase_two.registered_download_bytes, 278_000_000)
         with tempfile.TemporaryDirectory() as temporary:
             for spec in specs:
                 for artifact in spec.artifacts:

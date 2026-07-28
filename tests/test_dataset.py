@@ -16,6 +16,38 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class DatasetTests(unittest.TestCase):
+    def _write_dataset(
+        self,
+        root: Path,
+        thoughts: list[dict[str, object]],
+        judgments: list[dict[str, object]],
+    ) -> None:
+        (root / "manifest.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": "0.1.0",
+                    "name": "test-dataset",
+                    "description": "Dataset validation fixture.",
+                    "provenance": "test",
+                    "contains_personal_data": False,
+                    "annotation": {
+                        "candidate_pool": "all_prior_thoughts",
+                        "exhaustive": False,
+                        "unlabeled_pairs_are": "unknown",
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        (root / "thoughts.jsonl").write_text(
+            "\n".join(json.dumps(value) for value in thoughts),
+            encoding="utf-8",
+        )
+        (root / "judgments.jsonl").write_text(
+            "\n".join(json.dumps(value) for value in judgments),
+            encoding="utf-8",
+        )
+
     def test_smoke_dataset_is_valid_and_stable(self) -> None:
         dataset = load_dataset(PROJECT_ROOT / "datasets" / "smoke")
         self.assertEqual(len(dataset.thoughts), 10)
@@ -109,6 +141,67 @@ class DatasetTests(unittest.TestCase):
                 canonical_text_sha256(lf_root / "manifest.json"),
                 canonical_text_sha256(crlf_root / "manifest.json"),
             )
+
+    def test_unknown_or_future_explicit_links_are_rejected(self) -> None:
+        base = [
+            {
+                "id": "older",
+                "text": "Older thought",
+                "created_at": "2026-01-01T00:00:00Z",
+            },
+            {
+                "id": "newer",
+                "text": "Newer thought",
+                "created_at": "2026-01-02T00:00:00Z",
+            },
+        ]
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            unknown = [dict(value) for value in base]
+            unknown[1]["explicit_links"] = ["missing"]
+            self._write_dataset(root, unknown, [])
+            with self.assertRaisesRegex(ValueError, "unknown explicit link"):
+                load_dataset(root)
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            future = [dict(value) for value in base]
+            future[0]["explicit_links"] = ["newer"]
+            self._write_dataset(root, future, [])
+            with self.assertRaisesRegex(
+                ValueError, "explicit-link target.*must predate"
+            ):
+                load_dataset(root)
+
+    def test_unknown_verdict_is_rejected(self) -> None:
+        thoughts = [
+            {
+                "id": "older",
+                "text": "Older thought",
+                "created_at": "2026-01-01T00:00:00Z",
+            },
+            {
+                "id": "newer",
+                "text": "Newer thought",
+                "created_at": "2026-01-02T00:00:00Z",
+            },
+        ]
+        judgments = [
+            {
+                "source_id": "newer",
+                "target_id": "older",
+                "verdict": "unknown",
+                "relation_types": [],
+                "strength": 0.5,
+                "rationale": "Unknown is not a verdict label.",
+                "annotator": "test",
+            }
+        ]
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self._write_dataset(root, thoughts, judgments)
+            with self.assertRaisesRegex(ValueError, "verdict must be one of"):
+                load_dataset(root)
 
 
 if __name__ == "__main__":

@@ -71,15 +71,30 @@ class Prediction:
     rank: int
     score: float
     signals: dict[str, float]
+    method: str | None = None
+    confidence: float | None = None
+    abstained: bool | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        result: dict[str, Any] = {
             "source_id": self.source_id,
             "target_id": self.target_id,
             "rank": self.rank,
             "score": self.score,
             "signals": self.signals,
         }
+        if self.method is not None:
+            result["method"] = self.method
+            result["calibration"] = {
+                "confidence": self.confidence,
+                "abstained": bool(self.abstained),
+                "status": (
+                    "calibrated"
+                    if self.confidence is not None
+                    else "uncalibrated"
+                ),
+            }
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -158,4 +173,3 @@ class LexicalTemporalBaseline:
                 )
             )
         return tuple(predictions)
-

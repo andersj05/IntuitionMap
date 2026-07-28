@@ -1,0 +1,75 @@
+id: EXP-P2-001
+date: 2026-07-28
+research_question: >
+  Do transparent lexical retrieval controls recover LongMemEval evidence
+  sessions better than random and recency-only ranking?
+hypothesis: >
+  BM25 will improve macro evidence-session recall at 10 by at least five
+  percentage points absolute or ten percent relative over the strongest
+  cheaper control, with a paired 95 percent bootstrap interval excluding zero.
+decision_this_can_change: >
+  Whether BM25 becomes the frozen cheap generic retrieval floor and whether
+  Phase 2 has enough public retrieval signal to justify an embedding/hybrid
+  experiment.
+dataset_versions_and_hashes:
+  longmemeval_s:
+    revision: 98d7416c24c778c2fee6e6f3006e7a073259d48f
+    artifact: longmemeval_s_cleaned.json
+    sha256: d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442
+  intuition_map_smoke:
+    fingerprint: 7eb86af0562b26b546b99810817f4f44eda52615fc0992a8369fcfcba30d4418
+train_dev_test_time_boundaries: >
+  LongMemEval-S is used only for the 470 queries scored by its official
+  retrieval protocol; the 30 question IDs ending in _abs are excluded. No
+  model fitting or tuning occurs. The official history envelope defines what
+  precedes each question because the cleaned artifact contains wall-clock
+  timestamps that conflict with question_date. These anomalies are counted,
+  never repaired. IntuitionMap smoke remains a deterministic correctness
+  probe, not a quality test.
+intervention:
+  - stable random ranking
+  - most-recent ranking
+  - TF-IDF cosine ranking
+  - BM25 ranking with k1 1.2 and b 0.75
+  - explicit-link-first control where explicit links exist
+strongest_comparable_baseline: >
+  The best lower-complexity method among stable random, most recent, and
+  TF-IDF, selected by the preregistered primary metric.
+information_available_to_each_system: >
+  Exactly the native question and its eligible prior sessions. No answers,
+  evidence flags, future sessions, model summaries, or test feedback enter a
+  ranker.
+primary_metric: macro evidence-session recall at 10 on LongMemEval-S
+secondary_metrics:
+  - evidence recall at 1, 3, 5, and 10
+  - evidence hit rate at 1, 3, 5, and 10
+  - mean reciprocal rank
+  - binary nDCG at 10
+  - P50 and P95 query latency
+  - IntuitionMap smoke known-invalid exposure
+practical_minimum_effect: >
+  Five percentage points absolute or ten percent relative recall-at-10 gain
+  over the strongest cheaper baseline.
+statistical_test_and_interval: >
+  Paired query-level bootstrap with 2,000 resamples, seed 1729, and a
+  percentile 95 percent interval for the recall-at-10 delta.
+invalid_exposure_tolerance: >
+  No increase greater than 0.10 known-invalid predictions per judged smoke
+  query at k=5 relative to the strongest cheaper smoke control.
+latency_token_and_cost_budget:
+  max_additional_download_bytes: 278000000
+  max_wall_seconds_per_method: 300
+  paid_api_requests: 0
+  max_cost_usd: 0
+privacy_risks: >
+  Public conversational benchmark text remains in ignored local storage. No
+  private user content is read or transmitted.
+expected_failure_modes:
+  - lexical overlap retrieves distractors rather than evidence
+  - timestamps are dataset-local strings and not a universal recency signal
+  - answer-session labels do not provide explicit invalid examples
+  - benchmark contamination may affect later reader models, though no reader is used here
+stop_go_rule: >
+  Freeze BM25 only if the primary effect and interval pass. Otherwise freeze
+  the actual strongest cheap method and record that G2 was not met. LongMemEval
+  cannot by itself satisfy the invalid-exposure portion of personal-link G2.

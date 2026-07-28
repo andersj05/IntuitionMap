@@ -529,15 +529,15 @@ personalization, and relation handling without pretending to be personal gold.
 
 ### Phase 2 — Strengthen retrieval and measurement
 
-- [ ] Add random, most-recent, TF-IDF/BM25, and explicit-link controls.
-- [ ] Add an embedding interface and one reproducible local embedding baseline.
-- [ ] Add hybrid candidate fusion with deterministic tie handling.
-- [ ] Add graded nDCG, calibration-ready prediction records, paired bootstrap
+- [x] Add random, most-recent, TF-IDF/BM25, and explicit-link controls.
+- [x] Add an embedding interface and one reproducible local embedding baseline.
+- [x] Add hybrid candidate fusion with deterministic tie handling.
+- [x] Add graded nDCG, calibration-ready prediction records, paired bootstrap
   intervals, rolling chronological splits, and subgroup reports.
-- [ ] Add tests for same-query grouping, future-data leakage, duplicates, empty
+- [x] Add tests for same-query grouping, future-data leakage, duplicates, empty
   judgments, unknown labels, and invalid-exposure metrics.
-- [ ] Run one-variable ablations and write experiment cards before each run.
-- [ ] Perform error analysis using the existing failure taxonomy.
+- [x] Run one-variable ablations and write experiment cards before each run.
+- [x] Perform error analysis using the existing failure taxonomy.
 
 **Exit:** G2 passes on at least one appropriate evaluation source, or the
 decision log explains why retrieval signal is inadequate.
